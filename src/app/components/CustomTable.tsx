@@ -1,31 +1,31 @@
 import { Table } from "react-bootstrap";
-import { v4 } from "uuid";
+import { ColumnDefinitionType } from "../types/commons";
+import TableHeader from "./TableHeader";
+import TableRows from "./TableRows";
+import { IPhone } from "../interfaces/phone";
 
-interface ICustomTableProps {
-  titles: any[];
-  data: any[];
-}
+type TableProps<T, K extends keyof T> = {
+  data: Array<T>;
+  columns: Array<ColumnDefinitionType<T, K>>;
+  onEdit: (item: T) => void;
+  onDelete: (item: T) => void;
+};
 
-const CustomTable = ({ titles, data }: ICustomTableProps) => {
-  console.log();
+const CustomTable = <T, K extends keyof T>({
+  data,
+  columns,
+  onDelete,
+  onEdit,
+}: TableProps<T, K>): JSX.Element => {
   return (
-    <Table striped>
-      <thead>
-        <tr>
-          {titles.map((title, index) => (
-            <th key={`${title}-${index}`}>{title}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item) => (
-          <tr key={v4()}>
-            {titles.map((title) => (
-              <td key={v4()}>{item?.[title]}</td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
+    <Table striped responsive>
+      <TableHeader columns={columns} />
+      <TableRows
+        data={data}
+        columns={columns}
+        onDelete={onDelete}
+        onEdit={onEdit}
+      />
     </Table>
   );
 };

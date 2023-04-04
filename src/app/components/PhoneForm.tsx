@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { v4 } from "uuid";
 
@@ -17,9 +17,11 @@ const initialError = {
 
 interface IPhoneProps {
   onSubmit: (value: IPhone) => void;
+  onUpdate: (value: IPhone) => void;
+  current?: IPhone;
 }
 
-const PhoneForm = ({ onSubmit }: IPhoneProps) => {
+const PhoneForm = ({ onSubmit, current, onUpdate }: IPhoneProps) => {
   const [data, setData] = useState<IPhone>(initialData);
   const [error, setError] = useState<IErrorPhone>(initialError);
 
@@ -62,11 +64,22 @@ const PhoneForm = ({ onSubmit }: IPhoneProps) => {
     return result;
   };
 
+  useEffect(() => {
+    setData(current || initialData);
+  }, [current]);
+
   const onHandleSubmit = () => {
     if (validate()) {
       onSubmit({ ...data, key: v4() });
+      setData(initialData);
     }
-    console.log(error);
+  };
+
+  const onHandleUpdate = () => {
+    if (validate()) {
+      onUpdate(data);
+      setData(initialData);
+    }
   };
 
   return (
@@ -116,8 +129,12 @@ const PhoneForm = ({ onSubmit }: IPhoneProps) => {
           </Form.Text>
         )}
       </Form.Group>
-      <Button variant="primary" type="submit" onClick={onHandleSubmit}>
-        Add
+      <Button
+        variant="primary"
+        type="submit"
+        onClick={current ? onHandleUpdate : onHandleSubmit}
+      >
+        {current ? "Update" : "Add"}
       </Button>
     </Form>
   );
