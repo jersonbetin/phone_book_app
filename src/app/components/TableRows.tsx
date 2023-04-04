@@ -7,8 +7,8 @@ import { IPhone } from "../interfaces/phone";
 type TableRowsProps<T, K extends keyof T> = {
   data: Array<T>;
   columns: Array<ColumnDefinitionType<T, K>>;
-  onEdit: (item: T) => void;
-  onDelete: (item: T) => void;
+  onEdit?: (item: T) => void;
+  onDelete?: (item: T) => void;
 };
 
 const TableRows = <T, K extends keyof T>({
@@ -29,18 +29,22 @@ const TableRows = <T, K extends keyof T>({
             </td>
           );
         })}
-        <td>
-          <Button size="sm" variant="primary" onClick={() => onEdit(row)}>
-            Edit
-          </Button>
-          <Button
-            size="sm"
-            variant="danger"
-            className="ml-2"
-            onClick={() => onDelete(row)}
-          >
-            Remove
-          </Button>
+        <td className="text-end">
+          {onEdit && (
+            <Button size="sm" variant="primary" onClick={() => onEdit?.(row)}>
+              Edit
+            </Button>
+          )}
+          {onDelete && (
+            <Button
+              size="sm"
+              variant="danger"
+              className="ml-2"
+              onClick={() => onDelete?.(row)}
+            >
+              Remove
+            </Button>
+          )}
         </td>
       </tr>
     );

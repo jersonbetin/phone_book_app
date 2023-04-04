@@ -8,3 +8,19 @@
   bottom: 0;
   right: 0;
 }
+
+@media only screen and (min-width: 800px) {
+  .divider-left {
+    border-left: 1px solid rgb(206, 207, 204);
+  }
+
+  .padding-list-md {
+    padding: 0 20px;
+  }
+}
+
+@media screen and (max-width: 800px) and (min-width: 341px) {
+  .style-list {
+    margin-top: 20px;
+  }
+}
